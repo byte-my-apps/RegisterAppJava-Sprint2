@@ -16,17 +16,17 @@ import org.hibernate.annotations.GenerationTime;
 @Entity
 @Table(name="transaction")
 public class TransactionEntity {
-    @Id
-    @Column(name="id", updatable = false)
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private final UUID id;
+  @Id
+  @Column(name="id", updatable = false)
+  @GeneratedValue(strategy=GenerationType.AUTO)
+  private final UUID id;
 
 	public UUID getId() {
 		return this.id;
 	}
 
-    @Column(name="cashierid")
-    private UUID cashierId;
+  @Column(name="cashierid")
+  private UUID cashierId;
 
 	public UUID getCashierId() {
 		return this.cashierId;
@@ -37,8 +37,8 @@ public class TransactionEntity {
 		return this;
 	}
 
-    @Column(name="total")
-    private long total;
+  @Column(name="total")
+  private long total;
 
 	public long getTotal() {
 		return this.total;
