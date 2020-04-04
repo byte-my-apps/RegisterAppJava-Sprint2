@@ -61,9 +61,11 @@ public class TransactionEntity {
 		return this;
 	}
 
-    @Column(name="transactionreferenceid")
-    private UUID referenceId;
-
+	// TODO: The idea is that for returns or replacements that the
+	//  original transaction ID goes here, otherwise, this is identical
+	//  to ID or a default value
+	@Column(name="transactionreferenceid")
+  private UUID referenceId;
 	public UUID getReferenceId() {
 		return this.referenceId;
 	}

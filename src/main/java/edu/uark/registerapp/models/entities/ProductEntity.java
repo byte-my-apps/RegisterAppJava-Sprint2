@@ -75,6 +75,7 @@ public class ProductEntity {
 	public Product synchronize(final Product apiProduct) {
 		this.setCount(apiProduct.getCount());
 		this.setLookupCode(apiProduct.getLookupCode());
+		this.setPrice(apiProduct.getPrice());
 
 		apiProduct.setId(this.getId());
 		apiProduct.setCreatedOn(this.getCreatedOn());
@@ -98,7 +99,7 @@ public class ProductEntity {
 
 	public ProductEntity(final Product apiProduct) {
 		this.price = 0L; // TODO: Add price to Product.java and allow for edits via the productDetail view
-    	this.id = new UUID(0, 0);
+    this.id = new UUID(0, 0);
 		this.count = apiProduct.getCount();
 		this.lookupCode = apiProduct.getLookupCode();
 	}
