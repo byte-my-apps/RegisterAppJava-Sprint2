@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 	getStartTransactionActionElement().addEventListener(
 		"click",
-		() => { displayError("Functionality has not yet been implemented."); });
+		() => { window.location.assign("/transaction"); });
+		// button now goes to the Transaction page
 
 	getViewProductsActionElement().addEventListener(
 		"click",
