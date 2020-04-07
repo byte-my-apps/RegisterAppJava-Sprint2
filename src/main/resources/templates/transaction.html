@@ -1,3 +1,6 @@
+<!-- Model functionality off of planning document -->
+<!-- https://docs.google.com/document/d/1x1SriktgAxHsKaxn0SFOtU83-pObLtejZGn_QVYkkg4/edit -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,27 +9,44 @@
 </head>
 <body>
     <div class="header">
-		<h1 class="primary-message"></h1> <!-- Formerly had "Transaction" in the h1 tag. Removed due to placeholder. -->
+		<h1 class="primary-message"></h1> <!-- Formerly had "Transaction" in the h1 tag. Removed due to it being placeholder. -->
     </div>
     
 
     <form action="/action_page.php">
         <label for="lookupCode"></label>
         <input type="text" id="lookupCode" name="lookupCode"><br><br>
-        <input type="submit" value="Search">
-      </form>
+        <button type="button">Search</button>
+    </form>
 
 
 	<div id="main" class="main">
 		<div id="error" th:class="${#strings.isEmpty(errorMessage)} ? hidden : ''">
 			<h4 id="errorMessage" class="error-message" th:text="${errorMessage}"></h4>
-        </div>
-
-        <div class="transactionSearch">
-            
-        </div>
     </div>
+
+    <div class="transactionSearch"></div>
+  </div>
 
 </body>
 </html>
 
+<!-- TODO: Make JS that functions for different things
+    -Search button
+    -
+    -
+    -     -->
+
+    <!--
+Search Page
+Done on Transaction page
+GET transaction/{partial-product-lookup-code}
+Return appropriate error or populate transaction with new entry
+
+"What do we mean by partial search"
+"If the lookup code is abcd1234 then searching for cd34 or 1234 or a or bcd will find it"
+
+    -->
+
+  <!-- This line should allow us to have a transaction.js file that holds the scripts for the page. -->
+  <script type="text/javascript" src="otherFile.js"></script>
