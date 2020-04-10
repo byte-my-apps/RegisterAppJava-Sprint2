@@ -6,19 +6,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Transaction</title>
+    <!-- Figure out CSS to center stuff -->
 </head>
 <body>
-    <div class="header">
-		<h1 class="primary-message"></h1> <!-- Formerly had "Transaction" in the h1 tag. Removed due to it being placeholder. -->
+    <div class="center">
+		<h1 class="primary-message">Transaction</h1> <!-- TODO: Center this on page -->
     </div>
     
 
-    <form action="/action_page.php">
-        <label for="lookupCode"></label>
-        <input type="text" id="lookupCode" name="lookupCode"><br><br>
-        <button type="button">Search</button>
+    <form action="/action_page.php"> <!-- TODO: Center this on the page as well -->
+      <input type="text" id="lookupCode" name="lookupCode">
+      <button type="button">Search</button> <!-- TODO: Add functionality, ID to make this work -->
     </form>
 
+    <br>
+
+    <button type="button">Back to Menu</button> <!-- TODO: Add functionality, ID to make this work -->
+    <button type="button">Proceed to Checkout</button>
 
 	<div id="main" class="main">
 		<div id="error" th:class="${#strings.isEmpty(errorMessage)} ? hidden : ''">
@@ -35,13 +39,18 @@
     -Search button
     -
     -
-    -     -->
+    -
 
-    <!--
 Search Page
 Done on Transaction page
 GET transaction/{partial-product-lookup-code}
 Return appropriate error or populate transaction with new entry
+
+Edit Transaction Page
+GET /transaction (just reload the transaction page)
+PATCH /transaction/{entry-number}
+DELETE /transaction/{entry-number}
+
 
 "What do we mean by partial search"
 "If the lookup code is abcd1234 then searching for cd34 or 1234 or a or bcd will find it"
