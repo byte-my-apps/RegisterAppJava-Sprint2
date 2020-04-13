@@ -7,28 +7,64 @@
     <meta charset="UTF-8">
     <title>Transaction</title>
     <!-- Figure out CSS to center stuff -->
+
+    <style> 
+      plus {
+        color: green; 
+        background-color: transparent; 
+        cursor: pointer;
+      }
+      plus:active { 
+        color: blue;
+        background-color: transparent; 
+        text-decoration: underline;
+        cursor: pointer; 
+      }
+
+      minus { 
+        color: red; 
+        background-color: transparent; 
+        cursor: pointer;
+      }
+      minus:active { 
+        color: blue;
+        background-color: transparent; 
+        text-decoration: underline; 
+        cursor: pointer;
+      }
+      </style> 
+
+
 </head>
+
 <body>
     <div class="center">
-		<h1 class="primary-message">Transaction</h1> <!-- TODO: Center this on page -->
+		<h1 class="primary-message">Transaction</h1>
+    <input type="text" id="lookupCode" name="lookupCode">
+    <button type="button">Search</button>
     </div>
-    
-
-    <form action="/action_page.php"> <!-- TODO: Center this on the page as well -->
-      <input type="text" id="lookupCode" name="lookupCode">
-      <button type="button">Search</button> <!-- TODO: Add functionality, ID to make this work -->
-    </form>
-
     <br>
 
-    <button type="button">Back to Menu</button> <!-- TODO: Add functionality, ID to make this work -->
-    <button type="button">Proceed to Checkout</button>
+    <!-- Here is a basic setup for a list that we can use to import the transaction object into the website -->
+    <!-- Maybe we should make the - and + buttons with those instead? I think it would make the JS easier -->
+    <!-- With some outside opinions, the button should be used -->
+    <p id="item1">Test1 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> Remove</p>
+    <p id="item2">Test2 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> Remove</p>
+    <p id="item3">Test3 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> Remove</p>
+    <p id="item4">Test4 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> Remove</p>
+    <p id="item5">Test5 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> Remove</p>
+    <p id="item6">Test6 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> Remove</p>
+    <p id="item7">Test7 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> Remove</p>
+    <p id="item8">Test8 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> Remove</p>
+    <p id="item9">Test9 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> Remove</p>
+
+    <button id="menu" type="button">Back to Menu</button>
+    <button id="checkout" type="button">Proceed to Checkout</button>
 
 	<div id="main" class="main">
 		<div id="error" th:class="${#strings.isEmpty(errorMessage)} ? hidden : ''">
-			<h4 id="errorMessage" class="error-message" th:text="${errorMessage}"></h4>
+		<h4 id="errorMessage" class="error-message" th:text="${errorMessage}"></h4>
     </div>
-
     <div class="transactionSearch"></div>
   </div>
 
@@ -37,7 +73,7 @@
 
 <!-- TODO: Make JS that functions for different things
     -Search button
-    -
+    -Labels that update to what is in the transaction object
     -
     -
 
