@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-import javax.transaction.Transaction;
 import javax.transaction.Transactional;
 
 import edu.uark.registerapp.commands.ResultCommandInterface;
+import edu.uark.registerapp.models.api.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,9 +38,13 @@ public class TransactionCreateCommand implements ResultCommandInterface<Transact
 					.setQuantity(purchasedQuantity));
 		}
 
-		this.createTransaction(
+		final TransactionEntity transactionEntity = this.createTransaction(
 			transactionEntryEntities,
 			transactionTotal);
+
+		this.apiTransaction.setId(transactionEntity.getId());
+		this.apiTransaction.setCreatedOn(transactionEntity.getCreatedOn());
+		this.apiTransaction.setCashierId(transactionEntity.getCashierId());
 
 		return this.apiTransaction;
 	}
@@ -61,6 +65,8 @@ public class TransactionCreateCommand implements ResultCommandInterface<Transact
 
 			this.transactionEntryRepository.save(transactionEntryEntity);
 		}
+
+		return transactionEntity;
 	}
 
 	// Properties
