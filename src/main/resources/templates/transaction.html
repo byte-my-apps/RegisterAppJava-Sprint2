@@ -5,6 +5,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/styles/master.css">
+    
     <title>Transaction</title>
     <!-- Figure out CSS to center stuff -->
 
@@ -38,13 +40,13 @@
 </head>
 
 <body>
-    <div class="center">
+    <div class="main">                   <!-- linking the classes of the div portions to master.css to center -->
 		<h1 class="primary-message">Transaction</h1>
     <input type="text" id="lookupCode" name="lookupCode">
     <button type="button">Search</button>
     </div>
     <br>
-
+  <div class = "main">
     <!-- Here is a basic setup for a list that we can use to import the transaction object into the website -->
     <!-- Maybe we should make the - and + buttons with those instead? I think it would make the JS easier -->
     <!-- With some outside opinions, the button should be used -->
@@ -60,7 +62,7 @@
 
     <button id="menu" type="button">Back to Menu</button>
     <button id="checkout" type="button">Proceed to Checkout</button>
-
+  </div>
 	<div id="main" class="main">
 		<div id="error" th:class="${#strings.isEmpty(errorMessage)} ? hidden : ''">
 		<h4 id="errorMessage" class="error-message" th:text="${errorMessage}"></h4>
