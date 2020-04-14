@@ -27,15 +27,15 @@ public class TransactionCreateCommand implements ResultCommandInterface<Transact
 		long transactionTotal = 0L;
 		final List<TransactionEntryEntity> transactionEntryEntities = new LinkedList<>();
 
-		for (ProductEntity productEntity : this.productRepository.findAll()) {
-			int purchasedQuantity = ThreadLocalRandom.current().nextInt(1, 11);
+		for (TransactionEntry transactionEntry : this.transactionEntries) {
+			double purchasedQuantity = transactionEntry.getQuantity();
 
-			transactionTotal += (productEntity.getPrice() * purchasedQuantity);
+			transactionTotal += (transactionEntry.getPrice() * purchasedQuantity);
 
 			transactionEntryEntities.add(
 				(new TransactionEntryEntity())
-					.setPrice(productEntity.getPrice())
-					.setProductId(productEntity.getId())
+					.setPrice(transactionEntry.getPrice())
+					.setProductId(transactionEntry.getId())
 					.setQuantity(purchasedQuantity));
 		}
 
