@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import edu.uark.registerapp.commands.ResultCommandInterface;
 import edu.uark.registerapp.models.api.Transaction;
+import edu.uark.registerapp.models.api.TransactionEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +46,9 @@ public class TransactionCreateCommand implements ResultCommandInterface<Transact
 		this.apiTransaction.setId(transactionEntity.getId());
 		this.apiTransaction.setCreatedOn(transactionEntity.getCreatedOn());
 		this.apiTransaction.setCashierId(transactionEntity.getCashierId());
+		this.apiTransaction.setTotal(transactionEntity.getTotal());
+		this.apiTransaction.setTransactionType(transactionEntity.getType());
+		this.apiTransaction.setReferenceId(transactionEntity.getReferenceId());
 
 		return this.apiTransaction;
 	}
@@ -78,6 +82,17 @@ public class TransactionCreateCommand implements ResultCommandInterface<Transact
 		this.apiTransaction = apiTransaction;
 		return this;
 	}
+
+	private List<TransactionEntry> transactionEntries;
+	public List<TransactionEntry> getTransactionEntries() {
+		return this.transactionEntries;
+	}
+	public TransactionCreateCommand setTransactionEntries(
+			List<TransactionEntry> transactionEntries) {
+		this.transactionEntries = transactionEntries;
+		return this;
+	}
+
 	private UUID employeeId;
 	public UUID getEmployeeId() {
 		return this.employeeId;
