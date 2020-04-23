@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		"click",
 		() => { window.location.assign("/mainMenu"); });
 
+    // will need to add the listItem.querySelector() so transactionSummary will include the items in the Transaction
 	getTransactionSummActionElement().addEventListener(
 		"click",
 		() => { window.location.assign("/transactionSummary"); });
