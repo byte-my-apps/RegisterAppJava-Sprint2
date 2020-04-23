@@ -1,64 +1,86 @@
-<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
 
-<style>
-table, th, td {
-  border: 1px solid purple;
-}
-</style>
-
-<script>
-    
-</script>
-<title>Transaction summary</title>
-<h1>Transaction Summary</h1>
-<html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="/styles/master.css">  <!-- for centering of page and same font -->
+  <title>Register - Transaction Summary</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <link rel="stylesheet" type="text/css" href="/styles/master.css">  <!-- for centering of page and same font -->
+  <!-- if we get a css file working for this page    
+	<link rel="stylesheet" type="text/css" href="/styles/transactionSummary.css">
+  -->
+    
+  <script type="text/javascript" src="/scripts/master.js" defer></script>
+  <script type="text/javascript" src="/scripts/transactionSummary.js" defer></script>
 
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <style>
+    table, th, td {
+      border: 1px solid purple;
+    }
+    </style>
+
 </head>
     
 <body>
-   <div class = "main">		<!-- div wrapper to center page element -->
-    <table id="TransactionSummary">
-  <tr>
-    <th>Product</th>
-    <th>Quantity</th>
-    <th>Price</th>
-  </tr>
-  <tr>
-    <td>Test1</td>
-    <td>5</td>
-    <td>$100</td>
-  </tr>
-  <tr>
-    <td>Test2</td>
-    <td>4</td>
-    <td>$80</td>
-  </tr>
-  <tr>
-    <td>Test3</td>
-    <td>1</td>
-    <td>$10</td>
-  </tr>
-  <tr>
-    <td>Test4</td>
-    <td>2</td>
-    <td>$20</td>
-  </tr>
-  <tr>
-    <td>Test5</td>
-    <td>1</td>
-    <td>$20</td>
-  </tr>
-  <tr>
-    <td>TOTAL</td>
-    <td>13</td>
-    <td>$230</td> <!--Total amount-->
-    </tr>
-</table>
-   </div>
-   <button onclick="location.href" = 'mainMenu.html' type="button">OK</button>
+  <div class="header">
+		<h1 class="primary-message">Transaction Summary</h1>
+  </div>
+
+  <div id="main" class="main">
+		<div id="error" th:class="${#strings.isEmpty(errorMessage)} ? hidden : ''">
+		  <h4 id="errorMessage" class="error-message" th:text="${errorMessage}"></h4>
+    </div>
+    <br>
+
+    <div class="transactionSummaryTable">
+      <table id="TransactionSummary">
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </tr>
+        <tr>
+          <td>Test1</td>
+          <td>5</td>
+          <td>$100</td>
+        </tr>
+        <tr>
+          <td>Test2</td>
+          <td>4</td>
+          <td>$80</td>
+        </tr>
+        <tr>
+          <td>Test3</td>
+          <td>1</td>
+          <td>$10</td>
+        </tr>
+        <tr>
+          <td>Test4</td>
+          <td>2</td>
+          <td>$20</td>
+        </tr>
+        <tr>
+          <td>Test5</td>
+          <td>1</td>
+          <td>$20</td>
+        </tr>
+        <tr>
+          <td>TOTAL</td>
+          <td>13</td>
+          <td>$230</td> <!--Total amount-->
+        </tr>
+      </table>
+    </div> 
+    <br><br>
+
+    <div>
+      <button id="backButton" type="button" class="action">Back</button>
+      <button id="submitButton" type="button" class="action">Submit Transaction</button>
+    </div>   
+  </div>
+
+   <!-- to keep pages consistent, added the sign-out icon -->
+  <div class="footer">
+		<img id="signOutImage" src="/images/Sign-Out.png" alt="Sign Out" class="footer" />
+  </div>
+
 </body>
 </html>

@@ -1,18 +1,21 @@
 <!-- Model functionality off of planning document -->
 <!-- https://docs.google.com/document/d/1x1SriktgAxHsKaxn0SFOtU83-pObLtejZGn_QVYkkg4/edit -->
 
-<!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="https://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="/styles/master.css">
+  <title>Register - Transaction</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+  
+  <link rel="stylesheet" type="text/css" href="/styles/master.css">
+  <!-- if we get a css file working for this page    
+	<link rel="stylesheet" type="text/css" href="/styles/transaction.css">
+  -->
 
-    <script type="text/javascript" src="/scripts/master.js" defer></script>
-    <script type="text/javascript" src="/scripts/transaction.js" defer></script>
-    
-    <title>Transaction</title>
+  <script type="text/javascript" src="/scripts/master.js" defer></script>
+  <script type="text/javascript" src="/scripts/transaction.js" defer></script>
+
     <!-- Figure out CSS to center stuff -->
-
     <style> 
       plus {
         color: green; 
@@ -43,36 +46,70 @@
 </head>
 
 <body>
-    <div class="main">                   <!-- linking the classes of the div portions to master.css to center -->
+  <div class="header">
 		<h1 class="primary-message">Transaction</h1>
-    <input type="text" id="lookupCode" name="lookupCode">
-    <button type="button" id="searchButton">Search</button>
+  </div>
+
+  <div id="main" class="main">
+		<div id="error" th:class="${#strings.isEmpty(errorMessage)} ? hidden : ''">
+		  <h4 id="errorMessage" class="error-message" th:text="${errorMessage}"></h4>
     </div>
     <br>
-  <div class = "main">
-    <!-- Here is a basic setup for a list that we can use to import the transaction object into the website -->
-    <!-- Maybe we should make the - and + buttons with those instead? I think it would make the JS easier -->
-    <!-- With some outside opinions, the button should be used -->
-    <p id="item1">Test1 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button1">Remove</button></p>
-    <p id="item2">Test2 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button2">Remove</button></p>
-    <p id="item3">Test3 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button3">Remove</button></p>
-    <p id="item4">Test4 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button4">Remove</button></p>
-    <p id="item5">Test5 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button5">Remove</button></p>
-    <p id="item6">Test6 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button6">Remove</button></p>
-    <p id="item7">Test7 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button7">Remove</button></p>
-    <p id="item8">Test8 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button8">Remove</button></p>
-    <p id="item9">Test9 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button9">Remove</button></p>
 
-    <button id="mainMenuButton" type="button">Back to Menu</button>
-    <button id="transactionSumButton" type="button">Proceed to Checkout</button>
-  </div>
-	<div id="main" class="main">
-		<div id="error" th:class="${#strings.isEmpty(errorMessage)} ? hidden : ''">
-		<h4 id="errorMessage" class="error-message" th:text="${errorMessage}"></h4>
+    <div class="productSearch">
+      <!-- the search bar with the search button -->
+      <input type="search" id="lookupCode" name="lookupCode" placeholder="Enter the product's lookupcode..">
+      <button type="button" id="searchButton">Search</button>
     </div>
-    <div class="transactionSearch"></div>
-  </div>
+    <br><br>
 
+    <div class="transactionProductList">
+      <!-- the product list on the transaction -->
+      <!-- Here is a basic setup for a list that we can use to import the transaction object into the website -->
+      <!-- Maybe we should make the - and + buttons with those instead? I think it would make the JS easier -->
+      <!-- With some outside opinions, the button should be used -->
+      <p id="item1">Test1 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button1">Remove</button></p>
+      <p id="item2">Test2 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button2">Remove</button></p>
+      <p id="item3">Test3 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button3">Remove</button></p>
+      <p id="item4">Test4 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button4">Remove</button></p>
+      <p id="item5">Test5 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button5">Remove</button></p>
+      <p id="item6">Test6 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button6">Remove</button></p>
+      <p id="item7">Test7 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button7">Remove</button></p>
+      <p id="item8">Test8 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button8">Remove</button></p>
+      <p id="item9">Test9 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button9">Remove</button></p>
+      
+      <!-- trying to show each chosen product like this (similar to the formatting of productList.html), might also need to update 
+           the JS file to make it work??
+
+      <ul id="transactionProductListing" class="transactions">
+				<li th:each="transaction : ${transactions}">
+					<input type="hidden" name="productId" th:value="${transaction.productid}" />
+          <span class="productLookupCodeDisplay" th:text="${product.lookupCode}">Test 1</span>
+					<span class="productPriceDisplay" th:text="${product.price}">1999</span>
+          <button type="button"><minus>-</minus></button>
+          <span class="productCountDisplay" th:text="${product.count}">0</span>
+          <button type="button"><plus>+</plus></button>
+          <button type="button" id="button1">Remove</button>
+				</li>
+      </ul>
+
+      -->
+    
+    </div>
+    <br><br>
+
+    <div class="pageButtons">
+      <button id="mainMenuButton" type="button">Back to Menu</button>
+      <button id="transactionSumButton" type="button">Proceed to Checkout</button>
+    </div>
+
+  </div>
+  
+  <!-- to keep pages consistent, added the sign-out icon -->
+  <div class="footer">
+		<img id="signOutImage" src="/images/Sign-Out.png" alt="Sign Out" class="footer" />
+  </div>
+  
 </body>
 </html>
 
@@ -97,6 +134,3 @@ DELETE /transaction/{entry-number}
 "If the lookup code is abcd1234 then searching for cd34 or 1234 or a or bcd will find it"
 
     -->
-
-  <!-- This line should allow us to have a transaction.js file that holds the scripts for the page. -->
-  <script type="text/javascript" src="otherFile.js"></script>
