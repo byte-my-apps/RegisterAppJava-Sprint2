@@ -5,7 +5,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	getSubmitTransActionElement().addEventListener(
 		"click",
-		() => { });
+		() => { window.location.assign("/mainMenu") });
+		// might want to return back to the Main Menu page with a message saying that the transaction has been submitted
+		// once clicked, the database is updated
 });
 
 function calculatePrice() {
