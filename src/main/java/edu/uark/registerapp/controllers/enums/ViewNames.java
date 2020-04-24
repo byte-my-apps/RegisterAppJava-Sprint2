@@ -6,6 +6,7 @@ public enum ViewNames {
 	PRODUCT_DETAIL("productDetail"),
 	EMPLOYEE_DETAIL("employeeDetail"),
 	TRANSACTION("transaction"),
+	TRANSACTION_SUM("transactionSummary"),
 	PRODUCT_LISTING("productListing");
 	
 	public String getRoute() {
