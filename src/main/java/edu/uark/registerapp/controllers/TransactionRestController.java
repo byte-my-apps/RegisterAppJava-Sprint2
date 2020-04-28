@@ -22,6 +22,7 @@ import edu.uark.registerapp.commands.transactions.TransactionDeleteCommand;
 import edu.uark.registerapp.controllers.enums.ViewNames;
 import edu.uark.registerapp.models.api.ApiResponse;
 import edu.uark.registerapp.models.api.Product;
+import edu.uark.registerapp.models.api.Transaction;
 import edu.uark.registerapp.models.api.TransactionEntry;
 
 @RestController
@@ -30,7 +31,7 @@ public class TransactionRestController extends BaseRestController {
   @RequestMapping(value = "/", method = RequestMethod.POST)
   public @ResponseBody
   ApiResponse createTransaction(
-      @RequestBody final List<TransactionEntry> transactionEntries,
+      @RequestBody final Transaction transaction,
       final HttpServletRequest request,
       final HttpServletResponse response
   ) {
@@ -45,6 +46,8 @@ public class TransactionRestController extends BaseRestController {
       return elevatedUserResponse;
     }
 
+    List<TransactionEntry> transactionEntries = transactionCreateCommand.setApiTransaction(transaction).getTransactionEntries();
+    
     return this.transactionCreateCommand
         .setTransactionEntries(transactionEntries)
         .execute();
@@ -54,11 +57,13 @@ public class TransactionRestController extends BaseRestController {
   public @ResponseBody
   ApiResponse createTransactionEntry(
     @PathVariable final String partialLookupCode, 
-    @RequestBody final LinkedList<TransactionEntry> transactionEntries,
+    @RequestBody final Transaction transaction,
       final HttpServletRequest request,
       final HttpServletResponse response
   ) {
-        Product productToAdd = productByPartialLookupCodeQuery.setLookupCode(partialLookupCode).execute()[0];
+        Product[] productArray =  productByPartialLookupCodeQuery.setLookupCode(partialLookupCode).execute();
+        List<TransactionEntry> transactionEntries = transactionCreateCommand.setApiTransaction(transaction).getTransactionEntries();
+        Product productToAdd = productArray[0];
         transactionEntries.add(new TransactionEntry().setProductId(productToAdd.getId()));
         for(TransactionEntry entry : transactionEntries){
             System.out.println(entry.getId());
@@ -74,7 +79,9 @@ public class TransactionRestController extends BaseRestController {
       return elevatedUserResponse;
     }
 
-    return transactionEntries.get(0);
+    return this.transactionCreateCommand
+        .setTransactionEntries(transactionEntries)
+        .execute();
   }
 
   @RequestMapping(value = "/{transactionId}", method = RequestMethod.DELETE)
