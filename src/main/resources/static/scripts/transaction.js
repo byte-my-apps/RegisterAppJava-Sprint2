@@ -52,6 +52,44 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 });
 
+function searchActionClick() {
+    const partialLookupCode = document.getElementById("lookupCode");
+    const partialLookupCodeIsDefined = (partialLookupCode.trim() !== "");
+
+    const searchActionUrl = ("/api/transaction/"
+        + (partialLookupCodeIsDefined ? partialLookupCode : ""));
+    const searchRequest = {
+    lookupCode: partialLookupCode
+    };
+
+    if (partialLookupCodeIsDefined) {
+		ajaxPatch(searchActionUrl, searchRequest, (callbackResponse) => {
+			if (isSuccessResponse(callbackResponse)) {
+				completeSearchAction(callbackResponse);
+			}
+		});
+	} else {
+		ajaxPost(searchActionUrl, searchRequest, (callbackResponse) => {
+			if (isSuccessResponse(callbackResponse)) {
+				completeSearchAction(callbackResponse);
+			}
+		});
+	}
+}
+
+function completeSearchAction(callbackResponse) {
+	if (callbackResponse.data == null) {
+		return;
+	}
+
+	if ((callbackResponse.data.redirectUrl != null)
+		&& (callbackResponse.data.redirectUrl !== "")) {
+
+		window.location.replace(callbackResponse.data.redirectUrl);
+		return;
+	}
+}
+
 // Getters and setters
 function getSearch() {
     return document.getElementById("lookupCode");
