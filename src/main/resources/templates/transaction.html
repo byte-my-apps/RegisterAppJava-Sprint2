@@ -68,6 +68,17 @@
       <!-- Here is a basic setup for a list that we can use to import the transaction object into the website -->
       <!-- Maybe we should make the - and + buttons with those instead? I think it would make the JS easier -->
       <!-- With some outside opinions, the button should be used -->
+    <p id="tlist" >
+      <ul id="TransactionEntryListing" class="transactionentrys">
+        <li th:each="transactionentry : ${transactionentrys}">
+          <input type="hidden" name="productId" th:value="${transactionentry.id}" />
+          <span class="productLookupCodeDisplay" th:text="${transactionentry.productid}">lookupCode</span>
+          <br />&nbsp;&nbsp;<span class="productLookupCodeDisplay" th:text="${transactionentry.quantity}">1</span>
+          <br />&nbsp;&nbsp;<span class="productCountDisplay" th:text="${transactionentry.price}">0</span>
+          <br />&nbsp;&nbsp;<span class="productCreatedOnDisplay" th:text="${transactionentry.createdon}">12/31/1999</span>
+        </li>
+      </ul>
+    </p>
       <p id="item1">Test1 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button1">Remove</button></p>
       <p id="item2">Test2 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button2">Remove</button></p>
       <p id="item3">Test3 $1.00 <button type="button"><minus>-</minus></button> 5 <button type="button"><plus>+</plus></button> <button type="button" id="button3">Remove</button></p>

@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
+import edu.uark.registerapp.models.api.TransactionEntry;
+
 @Entity
 @Table(name="transactionentry")
 public class TransactionEntryEntity {
@@ -80,6 +82,19 @@ public class TransactionEntryEntity {
 	public LocalDateTime getCreatedOn() {
 		return this.createdOn;
 	}
+
+	public TransactionEntry synchronize(final TransactionEntry apiTransactionEntry) {
+		this.setQuantity(apiTransactionEntry.getQuantity());
+		this.setProductId(apiTransactionEntry.getProductId ());
+		this.setPrice(apiTransactionEntry.getPrice());
+
+		apiTransactionEntry.setId(this.getId());
+		apiTransactionEntry.setCreatedOn(this.getCreatedOn());
+
+		return apiTransactionEntry;
+	}
+
+
 
 	public TransactionEntryEntity() {
 		this.price = 0L;
