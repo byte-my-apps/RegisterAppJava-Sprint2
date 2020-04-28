@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 	getSearchActionElement().addEventListener(
 		"click",
-		() => {});
+		() => {
+            const lookupCode = getSearch();
+        });
 
 	getMainMenuActionElement().addEventListener(
 		"click",
@@ -51,6 +53,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 // Getters and setters
+function getSearch() {
+    return document.getElementById("lookupCode");
+}
+
 function getSearchActionElement() {
     return document.getElementById("searchButton");
 }
