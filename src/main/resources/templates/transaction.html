@@ -68,7 +68,7 @@
       <!-- Here is a basic setup for a list that we can use to import the transaction object into the website -->
       <!-- Maybe we should make the - and + buttons with those instead? I think it would make the JS easier -->
       <!-- With some outside opinions, the button should be used -->
-    
+      <h1>Cart</h1>
       <ul id="TransactionEntryListing" class="transactionentrys">
         <li th:each="transactionentry : ${transactionentrys}">
           <input name="productId" th:value="${transactionentry.id}" />
