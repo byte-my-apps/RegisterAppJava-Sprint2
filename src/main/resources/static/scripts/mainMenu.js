@@ -3,7 +3,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		"click",
 		() => { window.location.assign("/transaction"); });
 		// button now goes to the Transaction page
-
+	/*
+	getEditTransactionActionElement().addEventListener(
+		"click",
+		() => { window.location.assign("/transactionListing"); });
+		// button now goes to the Edit Transaction page
+	*/
 	getViewProductsActionElement().addEventListener(
 		"click",
 		() => { window.location.assign("/productListing"); });
@@ -33,7 +38,11 @@ function getCreateEmployeeActionElement() {
 function getStartTransactionActionElement() {
 	return document.getElementById("startTransactionButton");
 }
-
+/*
+function getEditTransactionActionElement() {
+	return document.getElementById("editTransactionButton");
+}
+*/
 function getProductSalesReportActionElement() {
 	return document.getElementById("productSalesReportButton");
 }
