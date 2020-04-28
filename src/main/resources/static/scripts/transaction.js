@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 function searchActionClick() {
-    const partialLookupCode = document.getElementById("lookupCode");
+    const partialLookupCode = document.getElementById("lookupCode").value;
     const partialLookupCodeIsDefined = (partialLookupCode.trim() !== "");
 
     const searchActionUrl = ("/api/transaction/"

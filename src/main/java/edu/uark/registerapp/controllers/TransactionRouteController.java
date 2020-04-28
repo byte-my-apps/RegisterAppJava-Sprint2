@@ -53,41 +53,9 @@ public class TransactionRouteController extends BaseRouteController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/{partialLookupCode}", method = RequestMethod.GET)
-    public ModelAndView addProduct(
-        @PathVariable final String partialLookupCode, 
-        @RequestParam final Map<String, String> queryParameters,
-        @RequestBody final LinkedList<TransactionEntry> transactionEntries,
-		final HttpServletRequest request
-	) {
-        final Optional<ActiveUserEntity> activeUserEntity =
-			this.getCurrentUser(request);
-		if (!activeUserEntity.isPresent()) {
-			return this.buildInvalidSessionResponse();
-        } 
-        
-        ModelAndView modelAndView =
-			this.setErrorMessageFromQueryString(
-				new ModelAndView(ViewNames.TRANSACTION.getViewName()),
-                queryParameters);
-        
-    
-        modelAndView.addObject(ViewModelNames.TRANSACTIONS.getValue(), this.transactionsQuery.execute());
-
-        Product productToAdd = productByPartialLookupCodeQuery.setLookupCode(partialLookupCode).execute()[0];
-        transactionEntries.add(new TransactionEntry().setProductId(productToAdd.getId()));
-        for(TransactionEntry entry : transactionEntries){
-            System.out.println(entry.getId());
-        }
-
-        return modelAndView;
-    }
-
     // Properties
 	@Autowired
     private TransactionCreateCommand transactionCreateCommand;
     @Autowired
     private TransactionsQuery transactionsQuery;
-    @Autowired
-    private ProductByPartialLookupCodeQuery productByPartialLookupCodeQuery;
 }
