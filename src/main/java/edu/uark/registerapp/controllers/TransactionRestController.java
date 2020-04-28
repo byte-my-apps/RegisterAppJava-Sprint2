@@ -65,7 +65,7 @@ public class TransactionRestController extends BaseRestController {
 		}
 
 		this.transactionDeleteCommand
-			.setTransactionId(transactionId)
+			.setTransactionEntryId(transactionId)
 			.execute();
 
 		return new ApiResponse();
