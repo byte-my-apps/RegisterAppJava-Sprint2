@@ -19,7 +19,7 @@ public class ProductByPartialLookupCodeQuery implements ResultCommandInterface<P
   public Product[] execute() {
     this.validateProperties();
 
-    List<Product> products = new LinkedList<>();
+    /*List<Product> products = new LinkedList<>();
     final List<ProductEntity> productEntities =
         this.productRepository.findByLookupCodeContainingIgnoreCase(
             this.partialLookupCode);
@@ -29,6 +29,14 @@ public class ProductByPartialLookupCodeQuery implements ResultCommandInterface<P
     }
 
     return (Product[])products.toArray();
+     */
+
+    return this.productRepository.findByLookupCodeContainingIgnoreCase(
+        this.partialLookupCode
+    ).stream()
+        .map(productEntity -> (new Product(productEntity)))
+        .toArray(Product[]::new);
+
   }
 
 
