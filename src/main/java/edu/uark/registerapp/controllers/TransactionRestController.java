@@ -21,9 +21,12 @@ import edu.uark.registerapp.commands.transactions.TransactionCreateCommand;
 import edu.uark.registerapp.commands.transactions.TransactionDeleteCommand;
 import edu.uark.registerapp.controllers.enums.ViewNames;
 import edu.uark.registerapp.models.api.ApiResponse;
+import edu.uark.registerapp.models.api.Employee;
 import edu.uark.registerapp.models.api.Product;
 import edu.uark.registerapp.models.api.Transaction;
 import edu.uark.registerapp.models.api.TransactionEntry;
+import edu.uark.registerapp.models.repositories.ActiveUserRepository;
+import edu.uark.registerapp.models.repositories.EmployeeRepository;
 
 @RestController
 @RequestMapping(value = "/api/transaction")
@@ -57,19 +60,30 @@ public class TransactionRestController extends BaseRestController {
   public @ResponseBody
   ApiResponse createTransactionEntry(
     @PathVariable final String partialLookupCode, 
-    @RequestBody final Transaction transaction,
+    @RequestBody Transaction transaction,
       final HttpServletRequest request,
       final HttpServletResponse response
   ) {
-        Product[] productArray =  productByPartialLookupCodeQuery.setLookupCode(partialLookupCode).execute();
-        List<TransactionEntry> transactionEntries = transactionCreateCommand.setApiTransaction(transaction).getTransactionEntries();
+        System.out.println(partialLookupCode);    
+        Product[] productArray = this.productByPartialLookupCodeQuery.setLookupCode(partialLookupCode).execute();
+        for(Product product : productArray) {
+          System.out.println(product.getId());
+        }
+        UUID employeeId = activeUserRepository.findBySessionKey(request.getSession().getId()).get().getEmployeeId();
+        transactionCreateCommand.setApiTransaction(transaction).setEmployeeId(employeeId).execute();
+        List<TransactionEntry> transactionEntries = new LinkedList<TransactionEntry>();
         Product productToAdd = productArray[0];
-        transactionEntries.add(new TransactionEntry().setProductId(productToAdd.getId()));
+        
+        transactionEntries.add(
+          new TransactionEntry( 
+          ).setProductId(
+            productToAdd.getId()));
         for(TransactionEntry entry : transactionEntries){
             System.out.println(entry.getId());
         }
-
-    final ApiResponse elevatedUserResponse =
+    
+        transactionCreateCommand.setApiTransaction(transaction).setTransactionEntries(transactionEntries);
+        final ApiResponse elevatedUserResponse =
         this.redirectUserNotElevated(
             request,
             response,
@@ -80,7 +94,6 @@ public class TransactionRestController extends BaseRestController {
     }
 
     return this.transactionCreateCommand
-        .setTransactionEntries(transactionEntries)
         .execute();
   }
 
@@ -117,4 +130,10 @@ public class TransactionRestController extends BaseRestController {
   
   @Autowired
   private ProductByPartialLookupCodeQuery productByPartialLookupCodeQuery;
+
+  @Autowired
+  private EmployeeRepository employeeRepository;
+
+  @Autowired
+  private ActiveUserRepository activeUserRepository;
 }

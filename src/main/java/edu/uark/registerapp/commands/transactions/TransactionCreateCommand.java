@@ -27,7 +27,8 @@ public class TransactionCreateCommand implements ResultCommandInterface<Transact
 		long transactionTotal = 0L;
 		final List<TransactionEntryEntity> transactionEntryEntities = new LinkedList<>();
 
-		for (TransactionEntry transactionEntry : this.transactionEntries) {
+		if (this.transactionEntries != null && !this.transactionEntries.isEmpty()) {
+			for (TransactionEntry transactionEntry : this.transactionEntries) {
 			double purchasedQuantity = transactionEntry.getQuantity();
 
 			transactionTotal += (transactionEntry.getPrice() * purchasedQuantity);
@@ -37,6 +38,7 @@ public class TransactionCreateCommand implements ResultCommandInterface<Transact
 					.setPrice(transactionEntry.getPrice())
 					.setProductId(transactionEntry.getId())
 					.setQuantity(purchasedQuantity));
+			}
 		}
 
 		final TransactionEntity transactionEntity = this.createTransaction(
