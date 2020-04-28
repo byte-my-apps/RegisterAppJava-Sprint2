@@ -3,6 +3,8 @@ package edu.uark.registerapp.controllers;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,9 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.uark.registerapp.commands.transactions.TransactionCreateCommand;
+import edu.uark.registerapp.commands.transactions.TransactionQuery;
 import edu.uark.registerapp.models.entities.ActiveUserEntity;
 import edu.uark.registerapp.controllers.enums.ViewModelNames;
 import edu.uark.registerapp.controllers.enums.ViewNames;
+
+import edu.uark.registerapp.commands.transactions.*;
+import edu.uark.registerapp.models.api.TransactionEntry;
 
 @Controller
 @RequestMapping(value = "/transaction")
@@ -39,14 +45,15 @@ public class TransactionRouteController extends BaseRouteController {
 				new ModelAndView(ViewNames.TRANSACTION.getViewName()),
                 queryParameters);
         
-        modelAndView.addObject(
-			ViewModelNames.IS_ELEVATED_USER.getValue(),
-            this.isElevatedUser(activeUserEntity.get()));
-                
+    
+        modelAndView.addObject(ViewModelNames.TRANSACTIONS.getValue(), this.transactionsQuery.execute());
+
         return modelAndView;
     }
 
     // Properties
 	@Autowired
-	private TransactionCreateCommand transactionCreateCommand;
+    private TransactionCreateCommand transactionCreateCommand;
+    @Autowired
+    private TransactionsQuery transactionsQuery;
 }

@@ -14,7 +14,7 @@ import edu.uark.registerapp.models.repositories.TransactionEntryRepository;
 @Service
 public class TransactionsQuery implements ResultCommandInterface<List<TransactionEntry>> {
         @Override
-        public List<TransactionEntry> execute() {
+        public LinkedList<TransactionEntry> execute() {
                 final LinkedList<TransactionEntry> transactionentrys = new LinkedList<TransactionEntry>();
 
                 for (final TransactionEntryEntity transactionEntryEntity : transactionEntryRepository.findAll()) {
