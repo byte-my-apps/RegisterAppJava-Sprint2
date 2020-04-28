@@ -31,6 +31,27 @@
     <br>
 
     <div class="transactionSummaryTable">
+      <!--
+      <table id="TransactionSummary" class="transactions">
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </tr>
+				<tr td:each="transaction : ${transactions}">
+          <input type="hidden" name="transactionID" th:value="${transaction.id}" />
+          <tr td:each="transactionentry : ${transactions}">
+					  <span class="productLookupCodeDisplay" th:text="${transactionentry.productid}">lookupCode</span>
+            <span class="productQuantity" th:text="${transactionentry.quantity}">0</span>
+          </tr>
+        </tr>
+        <tr>
+          <td>TOTAL</td>
+          <td>13</td>
+          <td class="transactionTotal" th:text="${transaction.total}">230</td>
+        </tr>
+      </table>
+      -->
       <table id="TransactionSummary">
         <tr>
           <th>Product</th>
