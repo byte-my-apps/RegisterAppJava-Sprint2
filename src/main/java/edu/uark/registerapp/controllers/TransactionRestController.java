@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.uark.registerapp.commands.products.ProductByPartialLookupCodeQuery;
 import edu.uark.registerapp.commands.transactions.TransactionCreateCommand;
 import edu.uark.registerapp.commands.transactions.TransactionDeleteCommand;
+import edu.uark.registerapp.controllers.enums.QueryParameterNames;
 import edu.uark.registerapp.controllers.enums.ViewNames;
 import edu.uark.registerapp.models.api.ApiResponse;
 import edu.uark.registerapp.models.api.Employee;
@@ -27,6 +29,7 @@ import edu.uark.registerapp.models.api.Transaction;
 import edu.uark.registerapp.models.api.TransactionEntry;
 import edu.uark.registerapp.models.repositories.ActiveUserRepository;
 import edu.uark.registerapp.models.repositories.EmployeeRepository;
+import edu.uark.registerapp.models.repositories.TransactionRepository;
 
 @RestController
 @RequestMapping(value = "/api/transaction")
@@ -57,13 +60,20 @@ public class TransactionRestController extends BaseRestController {
   }    
     
   @RequestMapping(value = "/{partialLookupCode}", method = RequestMethod.PATCH)
-  public @ResponseBody
+  public @ResponseBody 
   ApiResponse createTransactionEntry(
     @PathVariable final String partialLookupCode, 
-    @RequestBody Transaction transaction,
+    @RequestBody(required = false) String transactionId,
       final HttpServletRequest request,
       final HttpServletResponse response
   ) {
+        Transaction transaction = new Transaction();
+        if (transactionId != null) {
+          transaction = new Transaction(transactionRepository.findById(UUID.fromString(transactionId)).get());
+        }
+        
+        System.out.println(transactionId);
+
         System.out.println(partialLookupCode);    
         Product[] productArray = this.productByPartialLookupCodeQuery.setLookupCode(partialLookupCode).execute();
         for(Product product : productArray) {
@@ -73,6 +83,7 @@ public class TransactionRestController extends BaseRestController {
         transactionCreateCommand.setApiTransaction(transaction).setEmployeeId(employeeId).execute();
         List<TransactionEntry> transactionEntries = new LinkedList<TransactionEntry>();
         Product productToAdd = productArray[0];
+        System.out.println(productToAdd.getId());
         
         transactionEntries.add(
           new TransactionEntry( 
@@ -82,7 +93,7 @@ public class TransactionRestController extends BaseRestController {
             System.out.println(entry.getId());
         }
     
-        transactionCreateCommand.setApiTransaction(transaction).setTransactionEntries(transactionEntries);
+        transactionCreateCommand.setTransactionEntries(transactionEntries);
         final ApiResponse elevatedUserResponse =
         this.redirectUserNotElevated(
             request,
@@ -93,8 +104,18 @@ public class TransactionRestController extends BaseRestController {
       return elevatedUserResponse;
     }
 
-    return this.transactionCreateCommand
-        .execute();
+    transaction = this.transactionCreateCommand
+    .execute();
+
+			transaction
+				.setRedirectUrl(
+					ViewNames.TRANSACTION.getRoute().concat(
+						this.buildInitialQueryParameter(
+							"transactionId",
+              transaction.getId().toString())));		
+              
+    return transaction;
+   
   }
 
   @RequestMapping(value = "/{transactionId}", method = RequestMethod.DELETE)
@@ -136,4 +157,7 @@ public class TransactionRestController extends BaseRestController {
 
   @Autowired
   private ActiveUserRepository activeUserRepository;
+
+  @Autowired
+  private TransactionRepository transactionRepository;
 }

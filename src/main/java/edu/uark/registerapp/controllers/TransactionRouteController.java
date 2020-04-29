@@ -37,6 +37,7 @@ public class TransactionRouteController extends BaseRouteController {
 		@RequestParam final Map<String, String> queryParameters,
 		final HttpServletRequest request
 	) {
+        
         final Optional<ActiveUserEntity> activeUserEntity =
 			this.getCurrentUser(request);
 		if (!activeUserEntity.isPresent()) {
@@ -49,6 +50,11 @@ public class TransactionRouteController extends BaseRouteController {
                 queryParameters);
         
         modelAndView.addObject(ViewModelNames.TRANSACTIONS.getValue(), this.transactionsQuery.execute());
+
+        if (queryParameters.get("transactionId") != null) {
+            modelAndView.addObject("transactionId", queryParameters.get("transactionId"));
+            System.out.println(queryParameters.get("transactionId"));
+        }
 
         return modelAndView;
     }

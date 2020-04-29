@@ -36,7 +36,7 @@ public class TransactionCreateCommand implements ResultCommandInterface<Transact
 			transactionEntryEntities.add(
 				(new TransactionEntryEntity())
 					.setPrice(transactionEntry.getPrice())
-					.setProductId(transactionEntry.getId())
+					.setProductId(transactionEntry.getProductId())
 					.setQuantity(purchasedQuantity));
 			}
 		}
