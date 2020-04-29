@@ -4,19 +4,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import edu.uark.registerapp.models.entities.TransactionEntryEntity;
+import edu.uark.registerapp.models.repositories.TransactionEntryRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import edu.uark.registerapp.commands.products.ProductByPartialLookupCodeQuery;
 import edu.uark.registerapp.commands.transactions.TransactionCreateCommand;
@@ -63,25 +59,24 @@ public class TransactionRestController extends BaseRestController {
   @RequestMapping(value = "/{partialLookupCode}", method = RequestMethod.PATCH)
   public @ResponseBody 
   ApiResponse createTransactionEntry(
-    @PathVariable final String partialLookupCode, 
-      @RequestAttribute String "transactionId"(),
+    @PathVariable final String partialLookupCode,
+    @CookieValue(value = "transactionId", defaultValue = "") String transactionId,
       final HttpServletRequest request,
       final HttpServletResponse response
   ) {
         Transaction transaction = new Transaction();
-        if (transactionId != null) {
+        boolean newTransaction = true;
+
+        if (transactionId != null && !transactionId.equals("")) {
           transaction = new Transaction(transactionRepository.findById(UUID.fromString(transactionId)).get());
+          newTransaction = false;
         }
-
-        System.out.println(transactionId);
-
-        System.out.println(partialLookupCode);    
         Product[] productArray = this.productByPartialLookupCodeQuery.setLookupCode(partialLookupCode).execute();
         for(Product product : productArray) {
           System.out.println(product.getId());
         }
         UUID employeeId = activeUserRepository.findBySessionKey(request.getSession().getId()).get().getEmployeeId();
-        transactionCreateCommand.setApiTransaction(transaction).setEmployeeId(employeeId).execute();
+
         List<TransactionEntry> transactionEntries = new LinkedList<TransactionEntry>();
         Product productToAdd = productArray[0];
         System.out.println(productToAdd.getId());
@@ -89,7 +84,7 @@ public class TransactionRestController extends BaseRestController {
         transactionEntries.add(
           new TransactionEntry( 
           ).setProductId(
-            productToAdd.getId()));
+            productToAdd.getId()).setPrice(productToAdd.getPrice()).setQuantity(1));
         for(TransactionEntry entry : transactionEntries){
             System.out.println(entry.getId());
         }
@@ -104,17 +99,35 @@ public class TransactionRestController extends BaseRestController {
     if (!elevatedUserResponse.getRedirectUrl().equals(StringUtils.EMPTY)) {
       return elevatedUserResponse;
     }
+    if (newTransaction) {
+      transaction = transactionCreateCommand.setApiTransaction(transaction)
+          .setEmployeeId(employeeId)
+          .setTransactionEntries(transactionEntries)
+          .execute();
+    } else {
+      for (TransactionEntry transactionEntry : transactionEntries) {
+        TransactionEntryEntity transactionEntryEntity = new TransactionEntryEntity()
+            .setPrice(transactionEntry.getPrice())
+            .setProductId(transactionEntry.getProductId())
+            .setQuantity(transactionEntry.getQuantity());
+        transactionEntryEntity.setTransactionId(UUID.fromString(transactionId));
 
-    transaction = this.transactionCreateCommand
-    .execute();
+        this.transactionEntryRepository.save(transactionEntryEntity);
+      }
+    }
 
 			transaction
 				.setRedirectUrl(
 					ViewNames.TRANSACTION.getRoute().concat(
 						this.buildInitialQueryParameter(
 							"transactionId",
-              transaction.getId().toString())));		
-              
+              transaction.getId().toString())));
+
+    request.setAttribute("transactionId", transaction.getId().toString());
+
+    Cookie cookie = new Cookie("transactionId", transaction.getId().toString());
+    response.addCookie(cookie);
+
     return transaction;
    
   }
@@ -161,4 +174,8 @@ public class TransactionRestController extends BaseRestController {
 
   @Autowired
   private TransactionRepository transactionRepository;
+
+  @Autowired
+  private TransactionEntryRepository transactionEntryRepository;
+
 }

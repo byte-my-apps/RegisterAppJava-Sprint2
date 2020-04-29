@@ -2,6 +2,7 @@ package edu.uark.registerapp.commands.transactions;
   
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,20 @@ public class TransactionsQuery implements ResultCommandInterface<List<Transactio
         public LinkedList<TransactionEntry> execute() {
                 final LinkedList<TransactionEntry> transactionentrys = new LinkedList<TransactionEntry>();
 
-                for (final TransactionEntryEntity transactionEntryEntity : transactionEntryRepository.findAll()) {
+                for (final TransactionEntryEntity transactionEntryEntity : transactionEntryRepository.findByTransactionId(this.transactionId)) {
                         transactionentrys.addLast(new TransactionEntry(transactionEntryEntity));
                 }
 
                 return transactionentrys;
         }
 
+        public TransactionsQuery setTransactionId(UUID transactionId) {
+                this.transactionId = transactionId;
+                return this;
+        }
+
         @Autowired
         TransactionEntryRepository transactionEntryRepository;
+
+        private UUID transactionId;
 }

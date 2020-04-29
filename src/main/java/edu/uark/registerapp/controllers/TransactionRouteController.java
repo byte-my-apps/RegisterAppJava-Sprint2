@@ -6,7 +6,9 @@ import java.util.UUID;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,15 +51,50 @@ public class TransactionRouteController extends BaseRouteController {
 				new ModelAndView(ViewNames.TRANSACTION.getViewName()),
                 queryParameters);
         
-        modelAndView.addObject(ViewModelNames.TRANSACTIONS.getValue(), this.transactionsQuery.execute());
 
+
+        request.setAttribute("transactionId", "");
         if (queryParameters.get("transactionId") != null) {
-            modelAndView.addObject("transactionId", queryParameters.get("transactionId"));
-            System.out.println(queryParameters.get("transactionId"));
+          System.out.println(queryParameters.get("transactionId"));
+
+          request.setAttribute("transactionId", queryParameters.get("transactionId"));
+          modelAndView.addObject(ViewModelNames
+              .TRANSACTIONS.getValue(),
+              this.transactionsQuery.
+                  setTransactionId(UUID.fromString(queryParameters.get("transactionId"))).
+                  execute());
         }
 
-        return modelAndView;
+        return modelAndView.addAllObjects(queryParameters);
     }
+  @RequestMapping(value = "/{transactionId}", method = RequestMethod.GET)
+  public ModelAndView showTransactionWithId(
+      @PathVariable final UUID transactionId,
+      @RequestParam final Map<String, String> queryParameters,
+      final HttpServletRequest request,
+      final HttpServletResponse response
+  ) {
+
+    final Optional<ActiveUserEntity> activeUserEntity =
+        this.getCurrentUser(request);
+    if (!activeUserEntity.isPresent()) {
+      return this.buildInvalidSessionResponse();
+    }
+
+    ModelAndView modelAndView =
+        this.setErrorMessageFromQueryString(
+            new ModelAndView(ViewNames.TRANSACTION.getViewName()),
+            queryParameters);
+
+    modelAndView.addObject(ViewModelNames.TRANSACTIONS.getValue(), this.transactionsQuery.execute());
+
+    if (queryParameters.get("transactionId") != null) {
+      Cookie cookie = new Cookie("transactionId", queryParameters.get("transactionId"));
+      response.addCookie(cookie);
+    }
+
+    return modelAndView.addAllObjects(queryParameters);
+  }
 
     // Properties
 	@Autowired
