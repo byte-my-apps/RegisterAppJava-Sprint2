@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,7 +64,7 @@ public class TransactionRestController extends BaseRestController {
   public @ResponseBody 
   ApiResponse createTransactionEntry(
     @PathVariable final String partialLookupCode, 
-    @RequestBody(required = false) String transactionId,
+      @RequestAttribute String "transactionId"(),
       final HttpServletRequest request,
       final HttpServletResponse response
   ) {
@@ -71,7 +72,7 @@ public class TransactionRestController extends BaseRestController {
         if (transactionId != null) {
           transaction = new Transaction(transactionRepository.findById(UUID.fromString(transactionId)).get());
         }
-        
+
         System.out.println(transactionId);
 
         System.out.println(partialLookupCode);    
